@@ -1,14 +1,18 @@
 <!doctype html>
 <html>
 <head>
-<title>Mapbox Example</title>
+<title>Mapbox Example Maps</title>
 <style>
-#viewport, #viewport2, .mapwrapper {
-        width: 469px;
-        height: 400px;
-        cursor: move;
-        margin: 20px auto;
-        overflow: hidden;
+.mapwrapper {
+  margin: 20px auto;
+  width: 469px;
+}
+
+#viewport, #viewport2 {
+    width: 469px;
+    height: 400px;
+    cursor: move;
+    overflow: hidden;
 }
 
 .mapwrapper {
@@ -17,7 +21,7 @@
 
 .map-control {
     position: absolute;
-    top: 30px;
+    top: 50px;
     right: 10px;
     background: url(images/map-control.png) no-repeat;
     height: 63px;
@@ -78,32 +82,35 @@
 <script src="jquery.mousewheel.js"></script>
 </head>
 <body>
+
 <div class="mapwrapper">
-	<div id="viewport"> 
-	    <div style="background: url(images/layer1.png) no-repeat; width: 469px; height: 400px;"> 
-	        <!--top level map content goes here--> 
-	    </div> 
-	    <div style="height: 1097px; width: 1286px;"> 
-	        <img src="images/layer2.jpg" alt="" /> 
-	        <div class="mapcontent"> 
-	            <!--map content goes here--> 
-	        </div> 
-	    </div> 
-	    <div style="height: 1794px; width: 2104px;"> 
-	        <img src="images/layer3.jpg" alt="" /> 
-	         <div class="mapcontent"> 
-	            <!--map content goes here--> 
-	        </div> 
-	    </div> 
-	    <div style="height: 2492px; width: 2922px;"> 
-	        <img src="images/layer4.jpg" alt="" /> 
-	         <div class="mapcontent"> 
-	            <!--map content goes here--> 
-	        </div> 
-	    </div> 
-	</div>
+    <h4>Mousewheel enabled</h4>
+    <div id="viewport">
+      <div style="background: url(images/layer1.png) no-repeat; width: 469px; height: 400px;"> 
+          <!--top level map content goes here--> 
+      </div> 
+      <div style="height: 1097px; width: 1286px;"> 
+          <img src="images/layer2.jpg" alt="" /> 
+          <div class="mapcontent"> 
+              <!--map content goes here--> 
+          </div> 
+      </div> 
+      <div style="height: 1794px; width: 2104px;"> 
+          <img src="images/layer3.jpg" alt="" /> 
+           <div class="mapcontent"> 
+              <!--map content goes here--> 
+          </div> 
+      </div> 
+      <div style="height: 2492px; width: 2922px;"> 
+          <img src="images/layer4.jpg" alt="" /> 
+           <div class="mapcontent"> 
+              <!--map content goes here--> 
+          </div> 
+      </div> 
+    </div>
 </div>
 <div class="mapwrapper">
+    <h4>Simple control panel</h4>
     <div id="viewport2">
         <div style="background: url(images/layer1.png) no-repeat; width: 469px; height: 400px;">
             <!--top level map content goes here-->
@@ -140,12 +147,11 @@
     $(document).ready(function() { 
         $("#viewport").mapbox({mousewheel: true});
         $("#viewport2").mapbox({ 
-            mousewheel: true, 
-            layerSplit: 8//smoother transition for mousewheel 
+            layerSplit: 8 //smoother transition for mousewheel 
         }); 
-        $(".map-control a").click(function() {//control panel 
+        $(".map-control a").click(function() { //control panel 
             var viewport = $("#viewport2"); 
-            //this.className is same as method to be called 
+            // this.className is same as method to be called 
             if(this.className == "zoom" || this.className == "back") { 
                 viewport.mapbox(this.className, 2);//step twice 
             } 
