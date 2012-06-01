@@ -6,7 +6,7 @@
  * Released with the MIT License: http://www.opensource.org/licenses/mit-license.php
  * 
  * Depends:
- *  - jquery 1.3.2+
+ *  - jquery 1.3+
  */
 ;(function ($, window, document, undefined) {
     //"use strict";
@@ -515,4 +515,4 @@
         mousewheel: false /* Requires mousewheel event plugin: http://plugins.jquery.com/project/mousewheel*/ 
     };
 
-})(jQuery);
+})( jQuery, window, document );
