@@ -1,6 +1,6 @@
 /*!
  * Mapbox, a jQuery Map Plugin
- * Version 0.7.0
+ * Version 0.7
  * Original author: Abel Mohler (wayfarerweb.com).
  * Further changes: Dennis Schenk (gridonic.ch).
  * Released with the MIT License: http://www.opensource.org/licenses/mit-license.php
