@@ -465,8 +465,8 @@
                             clickDefault = true;
                         }
                         if (options.doubleClickZoom || options.doubleClickZoomOut || options.doubleClickMove) {
-                            //if either of these are registered we need to set the clickAction
-                            //into a timeout so that a double click clears it
+                            // If either of these are registered we need to set the clickAction
+                            // into a timeout so that a double click clears it.
                             clickTimeoutId = setTimeout(function(){ clickAction.call(viewport); }, 400);
                         }
                         else {
@@ -508,7 +508,7 @@
         doubleClickDistance: 1, // Number of positions (determined by layerSplit) to move on a double-click zoom event 
         clickDistance: 1, // Number of positions (determined by layerSplit) to move on a click zoom event 
         beforeDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens before dragging of map starts 
-        afterDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens at end of dragging after map is released "mouseup" 
+        afterDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens at end of dragging, after map is released on "mouseup" 
         beforeZoom: function(level, layer, xcoord, ycoord, viewport) {}, // Callback before a zoom happens 
         afterZoom: function(level, layer, xcoord, ycoord, viewport) {}, // Callback after zoom has completed
         afterLayerChange: function(level, layer, xcoord, ycoord, viewport) {}, // Callback after layer has been changed while zooming.
