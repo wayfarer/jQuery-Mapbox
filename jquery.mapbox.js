@@ -37,7 +37,7 @@
             if (distance === 0) { distance = 0; }
             else { distance = distance || 1; }
 
-            var layers = $(this).find(">div"), 
+            var layers = $(this).find(">.map-layer"),
                 limit = layers.length - 1, 
                 current = $(this).find(".current-map-layer"),
                 move = this.visible, 
@@ -229,7 +229,7 @@
                 this.visible = options.defaultLayer, this.layerSplit = options.layerSplit; // magic
 
                 var viewport = this, 
-                    layers = $(this).find(">div"),
+                    layers = $(this).find(">.map-layer"),
                     mapHeight = $(this).height(),
                     mapWidth = $(this).width(),
                     mapmove = false,
@@ -283,7 +283,7 @@
                     layers.eq(options.defaultLayer).find(options.mapContent).width(layers.eq(options.defaultLayer).width()).height(layers.eq(options.defaultLayer).height());
                 }
 
-                $(this).find(">div:not(.current-map-layer)").hide();
+                $(this).find(">.map-layer:not(.current-map-layer)").hide();
 
                 if (options.defaultX == null) {
                     options.defaultX = Math.floor((mapWidth / 2) - ($(this).find(".current-map-layer").width() / 2));
@@ -313,7 +313,7 @@
                  */
                 var weveMoved = false;
 
-                $(this).mousedown(function() {
+                $(this).bind('mousedown.mapbox', function() {
                     var layer = $(this).find(".current-map-layer"),
                         x = layer[0].style.left, 
                         y = layer[0].style.top;
@@ -325,8 +325,9 @@
                     return false; // otherwise dragging on IMG elements etc inside the map will cause problems
                 });
 
-                $(document).mouseup(function() {
-                    var layer = $(viewport).find(".current-map-layer"),
+                $(document).bind('mouseup.mapbox', function() {
+                    var $viewport = $(viewport),
+                        layer = $viewport.find(".current-map-layer"),
                         x = layer[0].style.left, 
                         y = layer[0].style.top;
                     x = _makeCoords(x);
@@ -337,12 +338,15 @@
                         clickDefault = false;
                     }
                     weveMoved = false;
+                    $viewport.removeClass('is-dragging');
                     return false;
                 });
 
-                $(document).mousemove(function(e) {
-                    var layer = $(viewport).find(".current-map-layer");
+                $(document).bind('mousemove.mapbox', function(e) {
+                    var $viewport = $(viewport),
+                        layer = $viewport.find(".current-map-layer");
                     if (mapmove && options.pan) {
+                        $viewport.addClass('is-dragging');
                         if (first) {
                             clientStartX = e.clientX;
                             clientStartY = e.clientY;
@@ -402,7 +406,7 @@
                 var clickTimeoutId = setTimeout(function(){},0), clickDefault = true;
 
                 if (options.doubleClickZoom || options.doubleClickZoomOut || options.doubleClickMove) {
-                    $(viewport).dblclick(function(e) {
+                    $(viewport).bind('dblclick.mapbox', function(e) {
                         // TODO: DRY this
                         // prevent single-click default
                         clearTimeout(clickTimeoutId);
@@ -434,7 +438,7 @@
                 }
 
                 if (options.clickZoom || options.clickZoomOut || options.clickMove) {
-                    $(viewport).click(function(e) {
+                    $(viewport).bind('click.mapbox', function(e) {
                         function clickAction() {
                             if (clickDefault) {
                                 // TODO: DRY this
