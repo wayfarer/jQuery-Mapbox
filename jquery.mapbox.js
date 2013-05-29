@@ -4,7 +4,7 @@
  * Original author: Abel Mohler (wayfarerweb.com).
  * Further changes: Dennis Schenk (gridonic.ch).
  * Released with the MIT License: http://www.opensource.org/licenses/mit-license.php
- * 
+ *
  * Depends:
  *  - jquery 1.3+
  */
@@ -16,9 +16,9 @@
         if (typeof callback === "function") {
             options.afterDragging = callback;
         }
-        var command, 
+        var command,
             arg = arguments;
- 
+
         if (typeof options === "string") {
             command = options; // command passes "methods" such as "zoom", "left", etc.
         }
@@ -37,10 +37,10 @@
             if (distance === 0) { distance = 0; }
             else { distance = distance || 1; }
 
-            var layers = $(this).find(">div"), 
-                limit = layers.length - 1, 
+            var layers = $(this).find(">.map-layer"),
+                limit = layers.length - 1,
                 current = $(this).find(".current-map-layer"),
-                move = this.visible, 
+                move = this.visible,
                 eq = move;
 
             move += (distance / options.layerSplit);
@@ -54,23 +54,23 @@
               options.beforeZoom(eq, current[0], this.xPos, this.yPos, this);
             }
 
-            var oldWidth = current.width(), 
+            var oldWidth = current.width(),
                 oldHeight = current.height(),
                 xPercent = (($(this).width() / 2) + this.xPos) / oldWidth,
                 yPercent = (($(this).height() / 2) + this.yPos) / oldHeight;
 
             if ((options.layerSplit > 1 && eq > 0)) {
-                var percent = move - (eq -1), 
-                    thisX = layers.eq(eq)[0].defaultWidth, 
-                    thisY = layers.eq(eq)[0].defaultHeight, 
-                    lastX = layers.eq(eq - 1).width(), 
+                var percent = move - (eq -1),
+                    thisX = layers.eq(eq)[0].defaultWidth,
+                    thisY = layers.eq(eq)[0].defaultHeight,
+                    lastX = layers.eq(eq - 1).width(),
                     lastY = layers.eq(eq - 1).height(),
-                    differenceX = thisX - lastX, 
-                    differenceY = thisY - lastY, 
-                    totalWidth = lastX + (differenceX * percent), 
+                    differenceX = thisX - lastX,
+                    differenceY = thisY - lastY,
+                    totalWidth = lastX + (differenceX * percent),
                     totalHeight = lastY + (differenceY * percent);
             }
- 
+
             if (options.layerSplit > 1 && eq > 0) {
                 layers.eq(eq).width(totalWidth).find(".map-layer-mask").width(totalWidth).height(totalHeight);
                 layers.eq(eq).height(totalHeight).find(options.mapContent).width(totalWidth).height(totalHeight);
@@ -117,17 +117,17 @@
 
         function _move(x, y, node) {
             node = node || $(this).find(".current-map-layer");
-            var limitX = 0, 
-                limitY = 0, 
-                mapWidth = $(this).width(), 
+            var limitX = 0,
+                limitY = 0,
+                mapWidth = $(this).width(),
                 mapHeight = $(this).height(),
-                nodeWidth = $(node).width(), 
+                nodeWidth = $(node).width(),
                 nodeHeight = $(node).height();
 
             if (mapWidth < nodeWidth) { limitX = mapWidth - nodeWidth; }
             if (mapHeight < nodeHeight) { limitY = mapHeight - nodeHeight; }
 
-            var left = 0 - (this.xPos + x), 
+            var left = 0 - (this.xPos + x),
                 top = 0 - (this.yPos + y);
 
             left = (left > 0) ? 0 : left;
@@ -204,9 +204,9 @@
                     y: $(this).find(".current-map-layer").height() / 2
                 };
                 var node = $(this).find(".current-map-layer"),
-                    newX = coords.x - ($(this).width() / 2), 
+                    newX = coords.x - ($(this).width() / 2),
                     newY = coords.y - ($(this).height() / 2);
- 
+
                 _position.call(this, newX, newY, node[0]);
             },
             zoomTo: function(level) {
@@ -218,7 +218,7 @@
         return this.each(function() {
 
             // Execute public methods if called.
-            if (typeof command === "string") { 
+            if (typeof command === "string") {
                 var execute = method[command];
                 options.layerSplit = this.layerSplit || options.layerSplit;
                 execute.call(this, callback);
@@ -228,8 +228,8 @@
             else {
                 this.visible = options.defaultLayer, this.layerSplit = options.layerSplit; // magic
 
-                var viewport = this, 
-                    layers = $(this).find(">div"),
+                var viewport = this,
+                    layers = $(this).find(">.map-layer"),
                     mapHeight = $(this).height(),
                     mapWidth = $(this).width(),
                     mapmove = false,
@@ -265,7 +265,7 @@
                             position: "absolute",
                             left: "0",
                             top: "0"
-                        }).after('<div class="map-layer-mask"></div>'); 
+                        }).after('<div class="map-layer-mask"></div>');
                     }
                 });
 
@@ -283,7 +283,7 @@
                     layers.eq(options.defaultLayer).find(options.mapContent).width(layers.eq(options.defaultLayer).width()).height(layers.eq(options.defaultLayer).height());
                 }
 
-                $(this).find(">div:not(.current-map-layer)").hide();
+                $(this).find(">.map-layer:not(.current-map-layer)").hide();
 
                 if (options.defaultX == null) {
                     options.defaultX = Math.floor((mapWidth / 2) - ($(this).find(".current-map-layer").width() / 2));
@@ -313,9 +313,9 @@
                  */
                 var weveMoved = false;
 
-                $(this).mousedown(function() {
+                $(this).bind('mousedown.mapbox', function() {
                     var layer = $(this).find(".current-map-layer"),
-                        x = layer[0].style.left, 
+                        x = layer[0].style.left,
                         y = layer[0].style.top;
                     x = _makeCoords(x);
                     y = _makeCoords(y);
@@ -325,9 +325,10 @@
                     return false; // otherwise dragging on IMG elements etc inside the map will cause problems
                 });
 
-                $(document).mouseup(function() {
-                    var layer = $(viewport).find(".current-map-layer"),
-                        x = layer[0].style.left, 
+                $(document).bind('mouseup.mapbox', function() {
+                    var $viewport = $(viewport),
+                        layer = $viewport.find(".current-map-layer"),
+                        x = layer[0].style.left,
                         y = layer[0].style.top;
                     x = _makeCoords(x);
                     y = _makeCoords(y);
@@ -337,12 +338,15 @@
                         clickDefault = false;
                     }
                     weveMoved = false;
+                    $viewport.removeClass('is-dragging');
                     return false;
                 });
 
-                $(document).mousemove(function(e) {
-                    var layer = $(viewport).find(".current-map-layer");
+                $(document).bind('mousemove.mapbox', function(e) {
+                    var $viewport = $(viewport),
+                        layer = $viewport.find(".current-map-layer");
                     if (mapmove && options.pan) {
+                        $viewport.addClass('is-dragging');
                         if (first) {
                             clientStartX = e.clientX;
                             clientStartY = e.clientY;
@@ -353,7 +357,7 @@
                         else {
                             weveMoved = true;
                         }
-                        var limitX = 0, 
+                        var limitX = 0,
                             limitY = 0;
 
                         if (mapWidth < layer.width()) { limitX = mapWidth - layer.width(); }
@@ -371,6 +375,12 @@
                         viewport.xPos = _makeCoords(layer[0].style.left);
                         viewport.yPos = _makeCoords(layer[0].style.top);
                     }
+                });
+
+                //quick fix for IE
+                //after some panning, the native drag event got fired
+                $(document).bind('dragstart.mapbox', function(e) {
+                    e.preventDefault();
                 });
 
                 if (options.mousewheel && typeof $.fn.mousewheel !== "undefined") {
@@ -402,7 +412,7 @@
                 var clickTimeoutId = setTimeout(function(){},0), clickDefault = true;
 
                 if (options.doubleClickZoom || options.doubleClickZoomOut || options.doubleClickMove) {
-                    $(viewport).dblclick(function(e) {
+                    $(viewport).bind('dblclick.mapbox', function(e) {
                         // TODO: DRY this
                         // prevent single-click default
                         clearTimeout(clickTimeoutId);
@@ -434,7 +444,7 @@
                 }
 
                 if (options.clickZoom || options.clickZoomOut || options.clickMove) {
-                    $(viewport).click(function(e) {
+                    $(viewport).bind('click.mapbox', function(e) {
                         function clickAction() {
                             if (clickDefault) {
                                 // TODO: DRY this
@@ -491,28 +501,28 @@
 
     // Default options
     $.fn.mapbox.options = {
-        zoom: true, // Does map zoom? 
-        pan: true, // Does map move side to side and up to down? 
-        defaultLayer: 0, // Starting at 0, which layer shows up first 
-        layerSplit: 4, // How many times to split each layer as a zoom level 
-        mapContent: ".mapcontent", // The name of the class on the content inner layer 
-        defaultX: null, // Default positioning on X-axis 
-        defaultY: null, // Default positioning on Y-axis 
-        zoomToCursor: true, // If true, position on the map where the cursor is set will stay the same relative distance from the edge when zooming 
-        doubleClickZoom: false, // If true, double clicking zooms to mouse position 
-        clickZoom: false, // If true, clicking zooms to mouse position 
-        doubleClickZoomOut: false, // If true, double clicking zooms out to mouse position 
-        clickZoomOut: false, // If true, clicking zooms out to mouse position 
-        doubleClickMove: false, // If true, double clicking moves the map to the cursor position 
-        clickMove: false, // If true, clicking moves the map to the cursor position 
-        doubleClickDistance: 1, // Number of positions (determined by layerSplit) to move on a double-click zoom event 
-        clickDistance: 1, // Number of positions (determined by layerSplit) to move on a click zoom event 
-        beforeDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens before dragging of map starts 
-        afterDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens at end of dragging, after map is released on "mouseup" 
-        beforeZoom: function(level, layer, xcoord, ycoord, viewport) {}, // Callback before a zoom happens 
+        zoom: true, // Does map zoom?
+        pan: true, // Does map move side to side and up to down?
+        defaultLayer: 0, // Starting at 0, which layer shows up first
+        layerSplit: 4, // How many times to split each layer as a zoom level
+        mapContent: ".mapcontent", // The name of the class on the content inner layer
+        defaultX: null, // Default positioning on X-axis
+        defaultY: null, // Default positioning on Y-axis
+        zoomToCursor: true, // If true, position on the map where the cursor is set will stay the same relative distance from the edge when zooming
+        doubleClickZoom: false, // If true, double clicking zooms to mouse position
+        clickZoom: false, // If true, clicking zooms to mouse position
+        doubleClickZoomOut: false, // If true, double clicking zooms out to mouse position
+        clickZoomOut: false, // If true, clicking zooms out to mouse position
+        doubleClickMove: false, // If true, double clicking moves the map to the cursor position
+        clickMove: false, // If true, clicking moves the map to the cursor position
+        doubleClickDistance: 1, // Number of positions (determined by layerSplit) to move on a double-click zoom event
+        clickDistance: 1, // Number of positions (determined by layerSplit) to move on a click zoom event
+        beforeDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens before dragging of map starts
+        afterDragging: function(layer, xcoord, ycoord, viewport) {}, // This callback happens at end of dragging, after map is released on "mouseup"
+        beforeZoom: function(level, layer, xcoord, ycoord, viewport) {}, // Callback before a zoom happens
         afterZoom: function(level, layer, xcoord, ycoord, viewport) {}, // Callback after zoom has completed
         afterLayerChange: function(level, layer, xcoord, ycoord, viewport) {}, // Callback after layer has been changed while zooming.
-        mousewheel: false /* Requires mousewheel event plugin: http://plugins.jquery.com/project/mousewheel*/ 
+        mousewheel: false /* Requires mousewheel event plugin: http://plugins.jquery.com/project/mousewheel*/
     };
 
 })( jQuery, window, document );
