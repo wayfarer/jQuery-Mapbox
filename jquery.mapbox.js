@@ -327,7 +327,7 @@
 
                 $(document).bind('mouseup.mapbox', function() {
                     var $viewport = $(viewport),
-                        layer = $viewport.find(".current-map-layer"),
+                        layer = $(this).find(".current-map-layer"),
                         x = layer[0].style.left,
                         y = layer[0].style.top;
                     x = _makeCoords(x);
